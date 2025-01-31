@@ -1,66 +1,36 @@
-# lunchLineup
-Workday Eats: Daily Lunch Specials
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Office Lunch Menu Management System
-Description
-The Office Lunch Menu Management System is a web application designed to streamline the process of managing daily lunch options in an office environment. Admins can easily add and manage daily lunch menus, while employees can view these menus and select their lunch preferences. This system aims to simplify the lunch ordering process and ensure that all employees' choices are recorded efficiently.
-Technologies
-Backend: Node.js with Express.js
-Frontend: React.js
-Database: PostgreSQL
-Features for MVP (Minimum Viable Product)
-Admin Interface:
-Add Daily Menu Options: Admins can add new lunch options for specific dates.
-View Employee Choices: Admins can view which employees have chosen which lunch options.
-Employee Interface:
-View Daily Menu: Employees can see the lunch options available for the current day.
-Select Lunch Choice: Employees can select their preferred lunch option from the daily menu.
+## Getting Started
 
+First, run the development server:
 
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Learn More
 
-Submission Instructions for Office Lunch Menu Management System
-To be considered for the internship position, please follow these submission instructions carefully:
-Create a GitHub Repository:
-Create a new GitHub repository for your project.
-Name your repository appropriately (e.g., office-lunch-menu-management).
-Implement the Project:
-Backend (Node.js with Express.js):
-Set up a Node.js project with Express.js.
-Implement routes and controllers for menu and user management.
-Use PostgreSQL for the database.
-Frontend (React.js):
-Set up a React.js project.
-Implement components for viewing the menu and selecting lunch choices.
-Ensure both backend and frontend are properly connected.
-Follow Commit Guidelines:
-Write clear, concise commit messages.
-Use conventional commits (e.g., feat:, fix:, chore:) to describe changes.
-Make small, incremental commits instead of large, monolithic ones.
-Use a Branching Strategy:
-Use master for stable code.
-Create feature branches (e.g., feature/add-menu) for new features.
-Merge feature branches into master with pull requests.
+To learn more about Next.js, take a look at the following resources:
 
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
+## Deploy on Vercel
 
-Example of Good Commit Messages:
-feat: add menu creation endpoint
-fix: correct user authentication logic
-chore: update README with setup instructions
-Follow Git Guidelines:
-Follow conventional commits for commit messages.
-Use feature branches for new features.
-Merge feature branches into master with pull requests.
-Update the README File:
-Ensure the README file in the root directory of your repository includes:
-Technologies used
-Features
-Database schema
-Setup instructions for both backend and frontend
-Instructions on how to run the projects
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
