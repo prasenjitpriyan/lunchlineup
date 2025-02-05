@@ -1,11 +1,15 @@
 'use client'
 
-import Link from 'next/link'
 import { useState } from 'react'
+import Link from 'next/link'
 
-export default function LoginPage() {
+export default function SignUpPage() {
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [role, setRole] = useState('')
+  const [image, setImage] = useState<File | null>(null)
+  const [errorMessage, setErrorMessage] = useState('')
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-my-color-02">
@@ -14,6 +18,17 @@ export default function LoginPage() {
           Create New Account
         </h1>
         <form className="space-y-4">
+          {errorMessage && (
+            <div className="text-red-500 text-center mb-4">{errorMessage}</div>
+          )}
+          <input
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full p-3 border rounded bg-my-color-04 text-my-color-02 focus:ring-2 focus:ring-my-color-01 outline-none"
+            required
+          />
           <input
             type="email"
             placeholder="Email"
@@ -30,6 +45,13 @@ export default function LoginPage() {
             className="w-full p-3 border rounded bg-my-color-04 text-my-color-02 focus:ring-2 focus:ring-my-color-01 outline-none"
             required
           />
+          <input
+            type="file"
+            onChange={(e) =>
+              setImage(e.target.files ? e.target.files[0] : null)
+            }
+            className="w-full p-3 border rounded bg-my-color-04 text-my-color-02 focus:ring-2 focus:ring-my-color-01 outline-none"
+          />
           <button
             type="submit"
             className="w-full bg-my-color-01 text-white font-semibold p-3 rounded-lg hover:bg-green-600 transition"
@@ -37,14 +59,6 @@ export default function LoginPage() {
             Sign Up
           </button>
         </form>
-        <div className="mt-4 text-center">
-          <Link
-            href="/forgetpassword"
-            className="text-my-color-01 hover:underline"
-          >
-            Forgot Password?
-          </Link>
-        </div>
         <div className="mt-4 text-center text-my-color-04">
           <p>
             Already have an account?{' '}
