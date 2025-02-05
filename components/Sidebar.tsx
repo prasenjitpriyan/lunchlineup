@@ -40,11 +40,6 @@ const Sidebar = () => {
         {/* Sidebar Links */}
         <ul className="mt-8 space-y-4">
           <li className="hover:text-my-color-02 cursor-pointer">
-            <Link href="/" onClick={closeSidebar}>
-              Home
-            </Link>
-          </li>
-          <li className="hover:text-my-color-02 cursor-pointer">
             <Link href="/dashboard" onClick={closeSidebar}>
               Dashboard
             </Link>

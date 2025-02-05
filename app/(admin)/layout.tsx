@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import Sidebar from '@/components/Sidebar'
 
 export const metadata: Metadata = {
   title: 'Lunch Lineup',
@@ -12,10 +13,9 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className="flex">
-        <main className="flex-1">{children}</main>
-      </body>
-    </html>
+    <div className="flex">
+      <Sidebar />
+      <div className="flex-1">{children}</div>
+    </div>
   )
 }
