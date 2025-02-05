@@ -1,6 +1,9 @@
-export type Order = {
-  id: number
-  employeeName: string
+import { Document, Types } from 'mongoose'
+
+export type OrderStatus = 'Ordered' | 'Pending'
+
+export interface Order extends Document {
+  employeeId: Types.ObjectId
   meal: string
-  status: 'Ordered' | 'Pending'
+  status: OrderStatus
 }
