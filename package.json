@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.7",
     "next": "15.1.6",
     "next-auth": "^4.24.11",
     "next-sanity": "^9.8.49",
