@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import SessionProviderWrapper from '@/components/SessionProviderWrapper'
 import AuthProvider from '@/components/AuthProvider'
 
 export const metadata: Metadata = {
@@ -18,7 +19,9 @@ export default function RootLayout({
     <html lang="en">
       <body className="flex">
         <main className="flex-1">
-          <AuthProvider>{children}</AuthProvider>
+          <SessionProviderWrapper>
+            <AuthProvider>{children}</AuthProvider>
+          </SessionProviderWrapper>
         </main>
       </body>
     </html>

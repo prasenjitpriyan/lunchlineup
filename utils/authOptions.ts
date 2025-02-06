@@ -5,7 +5,6 @@ import UserModel from '@/models/User'
 import { connectToDatabase } from '@/lib/mongodb'
 
 export const authOptions: NextAuthOptions = {
-  //Providers
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -30,11 +29,12 @@ export const authOptions: NextAuthOptions = {
           if (!isValid) {
             throw new Error('Invalid Password')
           }
+
           return {
             id: user._id.toString(),
             name: user.name,
             email: user.email,
-            role: user.role
+            role: user.role || 'employee' // Ensure role is always a string
           }
         } catch (error) {
           throw error
@@ -42,27 +42,28 @@ export const authOptions: NextAuthOptions = {
       }
     })
   ],
-  //Callbacks
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id
+        token.email = user.email ?? '' // Ensure token.email is always a string
+        token.role = user.role || 'employee' // Default role if undefined
       }
       return token
     },
     async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.id as string
+      session.user = {
+        ...session.user,
+        role: token.role || 'employee' // Default role if undefined
       }
       return session
     }
   },
-  //Pages
   pages: {
     signIn: '/login',
-    error: '/login'
+    error: '/login',
+    signOut: '/'
   },
-  //Session
   session: {
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60

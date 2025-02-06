@@ -2,10 +2,47 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const router = useRouter()
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError('')
+
+    const result = await signIn('credentials', {
+      redirect: false,
+      email,
+      password
+    })
+
+    if (result?.error) {
+      setError('Invalid credentials')
+    } else {
+      console.log('Login successful, fetching session...')
+      const res = await fetch('/api/auth/session')
+      const session = await res.json()
+      console.log('Session Data:', session) // Log session data
+
+      if (!session?.user?.role) {
+        setError('User role not found, please check backend setup.')
+        return
+      }
+
+      if (session.user.role === 'admin') {
+        console.log('Redirecting to /dashboard')
+        router.push('/dashboard')
+      } else {
+        console.log('Redirecting to /dailymenu')
+        router.push('/dailymenu')
+      }
+    }
+  }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-my-color-02">
@@ -13,7 +50,8 @@ export default function LoginPage() {
         <h1 className="text-2xl font-bold text-center text-my-color-04 mb-6">
           Welcome Back
         </h1>
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit}>
+          {error && <p className="text-red-500 text-center">{error}</p>}
           <input
             type="email"
             placeholder="Email"

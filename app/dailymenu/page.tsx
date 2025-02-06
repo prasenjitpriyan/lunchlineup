@@ -1,10 +1,14 @@
+'use client'
+
 import Image from 'next/image'
 import { menuItems } from '@/data/menuitems'
+import Navbar from '@/components/ProfileLink'
 
 export default function DailyMenuPage() {
   return (
     <div className="px-4 md:px-20 py-20 bg-my-color-02 text-my-color-04 min-h-screen">
       {/* Header */}
+      <Navbar />
       <header className="text-center mb-6">
         <h1 className="text-3xl font-semibold">Today&apos;s Lunch Menu</h1>
         <p className="text-lg text-gray-200">Choose your meal for today!</p>
