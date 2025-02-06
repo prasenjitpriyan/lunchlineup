@@ -4,6 +4,7 @@ import { Order } from '@/types/Order'
 const OrderSchema = new Schema<Order>(
   {
     employeeId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    employeeName: { type: String, required: true },
     meal: { type: String, required: true },
     status: { type: String, enum: ['Ordered', 'Pending'], required: true }
   },
