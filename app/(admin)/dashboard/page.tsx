@@ -1,5 +1,3 @@
-'use client'
-
 import Navbar from '@/components/ProfileLink'
 import React from 'react'
 
