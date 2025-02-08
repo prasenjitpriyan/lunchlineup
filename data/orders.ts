@@ -1,6 +1,4 @@
-import { Order } from '@/types/Order'
-
-export const orders: Order[] = [
+export const orders = [
   {
     id: 1,
     employeeName: 'Alice Johnson',

@@ -1,11 +1,9 @@
-import { MenuItem } from '@/types/MenuItem'
-
-export const menuItems: MenuItem[] = [
+export const menuItems = [
   {
     id: 1,
     title: 'Grilled Chicken Salad',
     description: 'Fresh chicken with mixed greens, vinaigrette',
-    price: '$12.99',
+    price: 12.99,
     dietaryTags: ['Gluten-Free'],
     image: '/my.webp'
   },
@@ -13,7 +11,7 @@ export const menuItems: MenuItem[] = [
     id: 2,
     title: 'Vegan Buddha Bowl',
     description: 'Rice, chickpeas, avocado, veggies, and tahini dressing',
-    price: '$10.50',
+    price: 10.5,
     dietaryTags: ['Vegan', 'Gluten-Free'],
     image: '/my.webp'
   },
@@ -22,7 +20,7 @@ export const menuItems: MenuItem[] = [
     title: 'Beef Burrito',
     description:
       'Seasoned beef wrapped in a soft tortilla with cheese and salsa',
-    price: '$11.00',
+    price: 11.0,
     dietaryTags: ['Contains Dairy'],
     image: '/my.webp'
   },
@@ -30,7 +28,7 @@ export const menuItems: MenuItem[] = [
     id: 4,
     title: 'Vegetarian Pizza',
     description: 'A delicious pizza topped with tomatoes, cheese, and veggies',
-    price: '$13.50',
+    price: 13.5,
     dietaryTags: ['Vegetarian'],
     image: '/my.webp'
   }
