@@ -7,11 +7,10 @@ const MenuItemSchema = new Schema<MenuItem>(
     description: { type: String, required: true },
     price: { type: Number, required: true },
     dietaryTags: { type: [String], required: true },
-    image: { type: String },
-    createdBy: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: true
+    image: {
+      type: String,
+      default:
+        'https://res.cloudinary.com/pd420/image/upload/v1738992066/uploads/aib2ituznkc1ktsibmh6.jpg'
     }
   },
   { timestamps: true }

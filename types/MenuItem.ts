@@ -1,10 +1,8 @@
-import { Document, Types } from 'mongoose'
-
-export interface MenuItem extends Document {
+export interface MenuItem {
+  _id: number
   title: string
   description: string
   price: number
   dietaryTags: string[]
   image: string
-  createdBy: Types.ObjectId
 }
