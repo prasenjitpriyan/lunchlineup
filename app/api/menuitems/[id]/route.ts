@@ -4,89 +4,78 @@ import { getSessionUser } from '@/utils/getSessionUser'
 import MenuItemModel from '@/models/MenuItem'
 import cloudinary from '@/lib/cloudinary'
 
-interface Params {
-  id: string
-}
-
 // GET===/api/menuitems/:id
-export const GET = async (
+export async function GET(
   request: Request,
-  { params }: { params: Params }
-): Promise<NextResponse> => {
+  { params }: { params: { id: string } }
+) {
   try {
     await connectToDatabase()
     const menuitem = await MenuItemModel.findById(params.id)
     if (!menuitem)
-      return new NextResponse('MenuItem Not Found', { status: 404 })
-    return new NextResponse(JSON.stringify(menuitem), { status: 200 })
+      return NextResponse.json('MenuItem Not Found', { status: 404 })
+
+    return NextResponse.json(menuitem, { status: 200 })
   } catch {
-    return new NextResponse('Something Went Wrong', { status: 500 })
+    return NextResponse.json('Something Went Wrong', { status: 500 })
   }
 }
 
 // DELETE===/api/menuitems/:id
-export const DELETE = async ({
-  params
-}: {
-  params: Params
-}): Promise<NextResponse> => {
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
   try {
-    const menuItemId = params.id
     const sessionUser = await getSessionUser()
 
-    // Check for session
     if (!sessionUser || !sessionUser.userId) {
-      return new NextResponse('User ID is required', { status: 401 })
+      return NextResponse.json('User ID is required', { status: 401 })
     }
-    const { userId } = sessionUser
-    await connectToDatabase()
 
-    const menuitem = await MenuItemModel.findById(menuItemId)
+    await connectToDatabase()
+    const menuitem = await MenuItemModel.findById(params.id)
     if (!menuitem)
-      return new NextResponse('MenuItem Not Found', { status: 404 })
+      return NextResponse.json('MenuItem Not Found', { status: 404 })
 
     // Verify ownership
-    if (menuitem.owner.toString() !== userId) {
-      return new NextResponse('Unauthorized', { status: 401 })
+    if (menuitem.owner.toString() !== sessionUser.userId) {
+      return NextResponse.json('Unauthorized', { status: 401 })
     }
 
     await menuitem.deleteOne()
-
-    return new NextResponse('MenuItem Deleted', { status: 200 })
+    return NextResponse.json('MenuItem Deleted', { status: 200 })
   } catch {
-    return new NextResponse('Something Went Wrong', { status: 500 })
+    return NextResponse.json('Something Went Wrong', { status: 500 })
   }
 }
 
 // PUT===/api/menuitems/:id
-export const PUT = async (
+export async function PUT(
   request: Request,
-  { params }: { params: Params }
-): Promise<NextResponse> => {
+  { params }: { params: { id: string } }
+) {
   try {
     await connectToDatabase()
     const sessionUser = await getSessionUser()
     if (!sessionUser || !sessionUser.userId) {
-      return new NextResponse('User ID is required', { status: 401 })
+      return NextResponse.json('User ID is required', { status: 401 })
     }
 
-    const { id } = params
-    const { userId } = sessionUser
     const formData = await request.formData()
 
     // Get menu item to update
-    const existingMenuItem = await MenuItemModel.findById(id)
-
+    const existingMenuItem = await MenuItemModel.findById(params.id)
     if (!existingMenuItem) {
-      return new NextResponse('MenuItem does not exist', { status: 404 })
+      return NextResponse.json('MenuItem does not exist', { status: 404 })
     }
 
     // Verify ownership
-    if (existingMenuItem.owner.toString() !== userId) {
-      return new NextResponse('Unauthorized', { status: 401 })
+    if (existingMenuItem.owner.toString() !== sessionUser.userId) {
+      return NextResponse.json('Unauthorized', { status: 401 })
     }
 
-    let imageUrl = ''
+    let imageUrl = existingMenuItem.image
 
     // Handle image upload with Cloudinary if a new image is provided
     const file = formData.get('image') as File | null
@@ -115,20 +104,20 @@ export const PUT = async (
     const menuItemData = {
       title: formData.get('title'),
       description: formData.get('description'),
-      price: formData.get('price'),
-      dietaryTags: formData.get('dietaryTags'),
-      image: imageUrl || existingMenuItem.image
+      price: Number(formData.get('price')),
+      dietaryTags: JSON.parse(formData.get('dietaryTags') as string),
+      image: imageUrl
     }
 
     // Update menu item in database
     const updatedMenuItem = await MenuItemModel.findByIdAndUpdate(
-      id,
+      params.id,
       menuItemData,
       { new: true }
     )
 
-    return new NextResponse(JSON.stringify(updatedMenuItem), { status: 200 })
+    return NextResponse.json(updatedMenuItem, { status: 200 })
   } catch {
-    return new NextResponse('Failed to update MenuItem', { status: 500 })
+    return NextResponse.json('Failed to update MenuItem', { status: 500 })
   }
 }

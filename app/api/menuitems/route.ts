@@ -1,4 +1,5 @@
-import { NextResponse } from 'next/server'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { NextRequest, NextResponse } from 'next/server'
 import { connectToDatabase } from '@/lib/mongodb'
 import MenuItemModel from '@/models/MenuItem'
 import cloudinary from '@/lib/cloudinary'
@@ -6,7 +7,7 @@ import cloudinary from '@/lib/cloudinary'
 export async function GET() {
   try {
     await connectToDatabase()
-    const menuItems = await MenuItemModel.find().populate('createdBy')
+    const menuItems = await MenuItemModel.find()
     return NextResponse.json(menuItems, { status: 200 })
   } catch (error) {
     return NextResponse.json(
@@ -16,41 +17,38 @@ export async function GET() {
   }
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     await connectToDatabase()
-    const formData = await req.formData()
 
+    // Parse form data
+    const formData = await req.formData()
     const title = formData.get('title') as string
     const description = formData.get('description') as string
-    const price = Number(formData.get('price'))
+    const price = formData.get('price') as string
     const dietaryTags = JSON.parse(formData.get('dietaryTags') as string)
-    const file = formData.get('image') as File | null
+    const imageFile = formData.get('image') as File | null
 
     let imageUrl = ''
-
-    if (file) {
-      const arrayBuffer = await file.arrayBuffer()
+    if (imageFile) {
+      const arrayBuffer = await imageFile.arrayBuffer()
       const buffer = Buffer.from(arrayBuffer)
 
-      const uploadResponse = await new Promise<{ secure_url: string }>(
-        (resolve, reject) => {
-          const stream = cloudinary.uploader.upload_stream(
-            { folder: 'uploads' },
-            (error, result) => {
-              if (error) return reject(error)
-              if (result) return resolve(result)
-              reject(new Error('No result from Cloudinary'))
-            }
-          )
-          stream.end(buffer)
-        }
-      )
+      // Upload image to Cloudinary
+      const uploadResult = await new Promise((resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream({ folder: 'uploads' }, (error, result) => {
+            if (error) reject(error)
+            else resolve(result)
+          })
+          .end(buffer)
+      })
 
-      imageUrl = uploadResponse.secure_url
+      imageUrl = (uploadResult as any).secure_url
     }
 
-    const newMenuItem = new MenuItemModel({
+    // Save menu item in MongoDB
+    const newMenuItem = await MenuItemModel.create({
       title,
       description,
       price,
@@ -58,11 +56,11 @@ export async function POST(req: Request) {
       image: imageUrl
     })
 
-    await newMenuItem.save()
     return NextResponse.json(newMenuItem, { status: 201 })
   } catch (error) {
+    console.error('Error uploading image:', error)
     return NextResponse.json(
-      { message: 'Error creating menu item', error },
+      { error: 'Failed to add menu item' },
       { status: 500 }
     )
   }
